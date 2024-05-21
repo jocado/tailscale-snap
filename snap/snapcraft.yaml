@@ -1,15 +1,14 @@
 name: tailscale
-version: "1.10.2"
+version: 1.66.4
 license: BSD-3-Clause
 summary: The easiest, most secure way to use WireGuard and 2FA.
 description: >
   Zero config VPN. Installs on any device in minutes, manages firewall rules for you, and works from anywhere.
 icon: tailscale.png
 
-base: core20
-grade: devel
-confinement: devmode
-compression: lzo
+base: core22
+confinement: strict
+grade: stable
 
 layout:
   /var/lib/tailscale:
@@ -28,15 +27,12 @@ apps:
 parts:
   tailscale:
     plugin: dump
-    source: https://pkgs.tailscale.com/stable/tailscale_${SNAPCRAFT_PROJECT_VERSION}_${SNAPCRAFT_TARGET_ARCH}.tgz
-    filesets:
-      no-systemd:
-        - -systemd
+    source: https://pkgs.tailscale.com/stable/tailscale_${SNAPCRAFT_PROJECT_VERSION}_${CRAFT_ARCH_BUILD_FOR}.tgz
     organize:
       tailscale: usr/bin/
       tailscaled: usr/sbin/
     stage:
-      - $no-systemd
+      - -systemd
 
   scripts:
     plugin: dump
