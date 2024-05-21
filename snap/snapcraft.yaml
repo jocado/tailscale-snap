@@ -17,12 +17,20 @@ layout:
 apps:
   tailscale:
     command: usr/bin/tailscale --socket /run/snap.tailscale/tailscaled.sock
+    plugs:
+      - network
 
   service:
     command: usr/sbin/tailscale_snap_daemon
     daemon: simple
     post-stop-command: usr/sbin/tailscaled --cleanup
     restart-condition: on-failure
+    plugs:
+      - network
+      - network-bind
+      - network-control
+      - firewall-control
+      - system-observe
 
 parts:
   tailscale:
@@ -33,6 +41,8 @@ parts:
       tailscaled: usr/sbin/
     stage:
       - -systemd
+    stage-packages:
+      - iproute2
 
   scripts:
     plugin: dump
